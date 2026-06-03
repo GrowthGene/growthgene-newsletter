@@ -1,0 +1,32 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "🚀 Deploy to GitHub + Netlify",
+      "type": "shell",
+      "command": "bash",
+      "args": ["-c", "cd '${workspaceFolder}' && git add -A && git commit -m 'feat: 뉴스레터 업데이트 $(date +%Y-%m-%d)' --allow-empty && git push origin main && netlify deploy --prod --dir . && echo '✅ 배포 완료! GitHub와 Netlify가 반영되었습니다.'"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "⚙️ Setup git remote (최초 1회)",
+      "type": "shell",
+      "command": "bash",
+      "args": ["-c", "cd '${workspaceFolder}' && git init && git config user.email 'nuskinworld@gmail.com' && git config user.name 'growthgene' && git branch -M main && (git remote remove origin 2>/dev/null || true) && git remote add origin 'https://github.com/growthgene/growthgene-newsletter.git' && echo '✅ Git remote 설정 완료'"],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "problemMatcher": []
+    }
+  ]
+}
