@@ -189,6 +189,7 @@
     gap: 8px;
   }
   .check-row {
+    width: 100%;
     display: flex;
     align-items: flex-start;
     gap: 14px;
@@ -196,6 +197,25 @@
     background: #fafafa;
     border-radius: 10px;
     border: 1px solid #f0f0f0;
+    cursor: pointer;
+    text-align: left;
+    font: inherit;
+    transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  .check-row:hover {
+    background: #fff8f5;
+    border-color: rgba(232,87,10,0.35);
+  }
+  .check-row:focus-visible {
+    outline: 2px solid rgba(232,87,10,0.45);
+    outline-offset: 2px;
+  }
+  .check-row.is-checked {
+    background: #fff8f5;
+    border-color: rgba(232,87,10,0.45);
+    box-shadow: 0 2px 10px rgba(232,87,10,0.06);
   }
   .check-box {
     width: 24px; height: 24px;
@@ -206,21 +226,26 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #E8570A;
+    background: #fff;
+    transition: background 0.15s;
   }
-  .check-box::after { content: '✓'; color: #fff; font-size: 14px; font-weight: 700; }
-  .check-empty { background: #fff; }
-  .check-empty::after { content: ''; }
+  .check-box::after { content: ''; color: #fff; font-size: 14px; font-weight: 700; }
+  .check-row.is-checked .check-box { background: #E8570A; }
+  .check-row.is-checked .check-box::after { content: '✓'; }
   .check-row span { font-size: 15px; color: #333; line-height: 1.65; }
   .check-result {
     margin-top: 16px;
     padding: 16px 20px;
-    background: #fff8f5;
-    border-left: 4px solid #E8570A;
+    background: #fafafa;
+    border-left: 4px solid #ddd;
     border-radius: 0 10px 10px 0;
     font-size: 15px;
     color: #444;
     line-height: 1.75;
+  }
+  .check-result.is-alert {
+    background: #fff8f5;
+    border-left-color: #E8570A;
   }
   .check-result strong { color: #E8570A; }
 
@@ -520,38 +545,38 @@
     <div class="section-title">나는 가짜 허기에 속고 있을까?</div>
     <div class="section-sub">해당하는 항목이 몇 개인지 확인해보세요</div>
     <div class="checklist-grid">
-      <div class="check-row">
+      <button type="button" class="check-row" aria-pressed="false">
         <div class="check-box"></div>
         <span>밥 먹은 지 2시간도 안 됐는데 달달한 것이 당긴다</span>
-      </div>
-      <div class="check-row">
+      </button>
+      <button type="button" class="check-row" aria-pressed="false">
         <div class="check-box"></div>
         <span>스트레스 받으면 떡볶이·치킨·케이크 등 특정 음식이 생각난다</span>
-      </div>
-      <div class="check-row">
+      </button>
+      <button type="button" class="check-row" aria-pressed="false">
         <div class="check-box"></div>
         <span>배가 부른데도 무의식적으로 냉장고 문을 열고 있다</span>
-      </div>
-      <div class="check-row">
+      </button>
+      <button type="button" class="check-row" aria-pressed="false">
         <div class="check-box"></div>
         <span>심심하거나 지루할 때 뭔가 먹고 싶은 충동이 온다</span>
-      </div>
-      <div class="check-row">
+      </button>
+      <button type="button" class="check-row" aria-pressed="false">
         <div class="check-box"></div>
         <span>식사 후에도 디저트나 간식을 또 찾게 된다</span>
-      </div>
-      <div class="check-row">
-        <div class="check-box check-empty"></div>
+      </button>
+      <button type="button" class="check-row" aria-pressed="false">
+        <div class="check-box"></div>
         <span>배고픔이 갑자기 찾아오고 바로 해소되지 않으면 짜증난다</span>
-      </div>
-      <div class="check-row">
-        <div class="check-box check-empty"></div>
+      </button>
+      <button type="button" class="check-row" aria-pressed="false">
+        <div class="check-box"></div>
         <span>야식 후 죄책감이 느껴지지만 다음 날 또 반복된다</span>
-      </div>
+      </button>
     </div>
-    <div class="check-result">
-      <strong>3개 이상 해당된다면?</strong><br>
-      경험하는 배고픔의 상당 부분이 '가짜 허기'일 가능성이 높습니다. 의지력 문제가 아니라 <strong>호르몬과 혈당의 문제</strong>입니다.
+    <div class="check-result" id="checkResult" aria-live="polite">
+      <strong>0개 선택됨</strong><br>
+      위 항목을 눌러 현재 내 배고픔 패턴을 확인해보세요.
     </div>
   </div>
 
@@ -714,5 +739,29 @@
   </div>
 
 </div>
+<script>
+  const checklistRows = document.querySelectorAll('.check-row');
+  const checkResult = document.getElementById('checkResult');
+
+  function updateCheckResult() {
+    const count = document.querySelectorAll('.check-row.is-checked').length;
+    if (count >= 3) {
+      checkResult.classList.add('is-alert');
+      checkResult.innerHTML = `<strong>${count}개 해당됩니다.</strong><br>경험하는 배고픔의 상당 부분이 '가짜 허기'일 가능성이 높습니다. 의지력 문제가 아니라 <strong>호르몬과 혈당의 문제</strong>입니다.`;
+      return;
+    }
+
+    checkResult.classList.remove('is-alert');
+    checkResult.innerHTML = `<strong>${count}개 선택됨</strong><br>3개 이상 해당된다면 가짜 허기의 가능성이 높습니다. 위 항목을 눌러 현재 내 배고픔 패턴을 확인해보세요.`;
+  }
+
+  checklistRows.forEach((row) => {
+    row.addEventListener('click', () => {
+      const isChecked = row.classList.toggle('is-checked');
+      row.setAttribute('aria-pressed', String(isChecked));
+      updateCheckResult();
+    });
+  });
+</script>
 </body>
 </html>
