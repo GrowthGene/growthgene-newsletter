@@ -403,6 +403,12 @@
     font-size: 14px;
     flex-shrink: 0;
   }
+  .cta-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
   .cta-btn {
     display: inline-block;
     background: #E8570A;
@@ -415,6 +421,11 @@
     transition: background 0.2s;
   }
   .cta-btn:hover { background: #d14d09; }
+  .cta-btn.kakao {
+    background: #FEE500;
+    color: #1a1a1a;
+  }
+  .cta-btn.kakao:hover { background: #f3d900; }
   .cta-note {
     margin-top: 14px;
     font-size: 13px;
@@ -500,6 +511,7 @@
     .cta-section p { font-size: 15px; }
     .cta-feat { font-size: 15px; }
     .cta-features { max-width: 100%; }
+    .cta-actions { align-items: stretch; }
     .cta-btn {
       display: block;
       width: 100%;
@@ -723,7 +735,10 @@
       <div class="cta-feat">대사 건강 개선 및 체지방 관리 지원</div>
       <div class="cta-feat">탄수화물 위주 식습관에 최적화</div>
     </div>
-    <a href="https://glucoedge.netlify.app/" class="cta-btn" target="_blank">혈당 관리 솔루션 알아보기 →</a>
+    <div class="cta-actions">
+      <a href="https://glucoedge.netlify.app/" class="cta-btn" target="_blank" rel="noopener">혈당 관리 솔루션 알아보기 →</a>
+      <a href="https://open.kakao.com/o/ggNiOy8h" class="cta-btn kakao" target="_blank" rel="noopener">저절로 살이 빠지는 비밀연구소 입장하기 →</a>
+    </div>
     <div class="cta-note">
       궁금한 점은 언제든지 인스타그램 DM으로 문의해주세요<br>
       개인 상황에 맞는 1:1 웰니스 상담을 도와드립니다
